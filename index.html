@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Průběh civilní zakázky – Metal Granit</title>
+<title>Procesní mapy – Metal Granit</title>
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -23,12 +23,18 @@
     --warn-bg:     #fff8f0;
     --warn-border: #f0d090;
 
-    /* phase accent stripes — muted but distinct */
+    /* phase accent stripes — civilní zakázka */
     --ph1: #3aaa35;
     --ph2: #4a7fa8;
     --ph3: #9a7a3a;
     --ph4: #a84a4a;
     --ph5: #5a5a9a;
+
+    /* phase accent stripes — drobná zakázka */
+    --dph1: #2a8a7a;
+    --dph2: #7a5aaa;
+    --dph3: #aa6a3a;
+    --dph4: #4a8a4a;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -66,7 +72,6 @@
     align-items: stretch;
     min-height: 62px;
   }
-  /* Green logo block */
   .nav-logo-block {
     background: var(--green);
     padding: 10px 20px 10px 24px;
@@ -75,8 +80,6 @@
     flex-shrink: 0;
     min-width: 170px;
   }
-  /* SVG logo replication */
-  .logo-svg-wrap { display: flex; align-items: center; }
   .logo-text {
     font-family: 'Libre Baskerville', serif;
     color: white;
@@ -85,7 +88,56 @@
   .logo-text .small { font-size: 11px; font-weight: 400; letter-spacing: 0.5px; display: block; }
   .logo-text .big   { font-size: 17px; font-weight: 700; display: block; letter-spacing: 0.5px; }
 
-  /* nav right — document label */
+  /* ── Process Tabs ── */
+  .nav-tabs {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin-left: 0;
+  }
+  .nav-tab {
+    display: flex;
+    align-items: center;
+    padding: 0 28px;
+    font-size: 14px;
+    color: #888;
+    letter-spacing: 0.5px;
+    font-weight: 400;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s ease;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    font-family: 'Source Sans 3', sans-serif;
+    white-space: nowrap;
+    position: relative;
+  }
+  .nav-tab:hover {
+    color: #ccc;
+    background: rgba(255,255,255,0.04);
+  }
+  .nav-tab.active {
+    color: #fff;
+    border-bottom-color: var(--green);
+    font-weight: 500;
+  }
+  .nav-tab .tab-icon {
+    margin-right: 8px;
+    font-size: 16px;
+    opacity: 0.7;
+  }
+  .nav-tab.active .tab-icon {
+    opacity: 1;
+  }
+  .nav-tab-divider {
+    width: 1px;
+    background: #3a3a3a;
+    align-self: stretch;
+    margin: 14px 0;
+  }
+
   .nav-right {
     display: flex;
     align-items: center;
@@ -109,6 +161,7 @@
     background: var(--white);
     border-bottom: 4px solid var(--green);
     padding: 44px 56px 36px;
+    transition: border-color 0.3s;
   }
   .header-inner {
     max-width: 1320px;
@@ -153,7 +206,6 @@
     letter-spacing: 0.2px;
   }
 
-  /* Logo in header (large) */
   .header-logo {
     flex-shrink: 0;
     opacity: 0.18;
@@ -161,7 +213,6 @@
     margin-top: -8px;
   }
 
-  /* Phase legend */
   .phase-legend {
     display: flex;
     flex-direction: column;
@@ -199,6 +250,26 @@
     margin: 0 auto;
     padding: 52px 56px 72px;
   }
+
+  /* ── Responsible person badge ── */
+  .person-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: #f0e8f8;
+    color: #6a4a9a;
+    border: 1px solid #d8c8e8;
+    margin-top: 6px;
+  }
+  .person-badge.katka { background: #e8f0f8; color: #3a6a9a; border-color: #c0d4e8; }
+  .person-badge.lenka { background: #f8e8f0; color: #9a3a6a; border-color: #e8c0d4; }
+  .person-badge.adam  { background: #e8f8f0; color: #3a9a6a; border-color: #c0e8d4; }
+  .person-badge.ivo   { background: #f8f0e8; color: #9a6a3a; border-color: #e8d4c0; }
+  .person-badge.simona { background: #f0f0f8; color: #5a5a9a; border-color: #d0d0e8; }
 
   /* ── Phase Block ── */
   .phase-block { margin-bottom: 56px; }
@@ -283,6 +354,11 @@
     width: 195px;
     min-width: 175px;
   }
+  .step-card.conditional-card {
+    background: #fafaf8;
+    border-style: dashed;
+    border-top-style: solid;
+  }
 
   .step-num {
     font-size: 11px;
@@ -361,6 +437,21 @@
     color: var(--text-pale);
     font-weight: 400;
     margin-right: 10px;
+    white-space: nowrap;
+  }
+
+  /* ── Conditional indicator ── */
+  .cond-badge {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #b08030;
+    background: #fef8f0;
+    border: 1px solid #e8d0a0;
+    padding: 1px 6px;
+    border-radius: 2px;
+    margin-left: auto;
     white-space: nowrap;
   }
 
@@ -465,6 +556,21 @@
   .d-warn-text { font-size: 14px; line-height: 1.7; color: var(--text-mid); }
   .d-note { font-size: 14px; color: var(--text-pale); font-style: italic; line-height: 1.65; }
 
+  /* ── Responsible persons in drawer ── */
+  .d-persons { display: flex; flex-wrap: wrap; gap: 6px; }
+  .d-person {
+    font-size: 13px;
+    padding: 5px 12px;
+    border-radius: 2px;
+    font-weight: 500;
+  }
+  .d-person.katka { background: #e8f0f8; color: #3a6a9a; border: 1px solid #c0d4e8; }
+  .d-person.lenka { background: #f8e8f0; color: #9a3a6a; border: 1px solid #e8c0d4; }
+  .d-person.adam  { background: #e8f8f0; color: #3a9a6a; border: 1px solid #c0e8d4; }
+  .d-person.ivo   { background: #f8f0e8; color: #9a6a3a; border: 1px solid #e8d4c0; }
+  .d-person.simona { background: #f0f0f8; color: #5a5a9a; border: 1px solid #d0d0e8; }
+  .d-person.ucetni { background: #f0f0f0; color: #5a5a5a; border: 1px solid #d0d0d0; }
+
   /* ══════════════════════════
      FOOTER STATS
   ══════════════════════════ */
@@ -501,12 +607,148 @@
   .stats-logo-small { opacity: 0.25; width: 64px; }
   .stats-tagline { font-size: 13px; color: #666; font-weight: 300; line-height: 1.5; max-width: 220px; }
 
+  /* ══════════════════════════
+     TRANSITION
+  ══════════════════════════ */
+  .fade-enter {
+    animation: fadeUp 0.35s ease forwards;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ══════════════════════════
+     GUIDE LAYOUT (platby)
+  ══════════════════════════ */
+  .guide-section {
+    margin-bottom: 48px;
+  }
+  .guide-section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 6px;
+  }
+  .guide-section-icon {
+    width: 46px; height: 46px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    color: white;
+    flex-shrink: 0;
+  }
+  .guide-section-titles { flex: 1; }
+  .guide-section-name {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  .guide-section-sub {
+    font-size: 13px;
+    color: var(--text-pale);
+    font-weight: 400;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
+  .guide-divider {
+    height: 2px;
+    margin: 14px 0 24px;
+  }
+  .guide-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  .guide-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.18s ease;
+  }
+  .guide-card:hover {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.10);
+    transform: translateY(-3px);
+  }
+  .guide-card-top {
+    padding: 6px 20px;
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .guide-card-body {
+    padding: 18px 20px 16px;
+  }
+  .guide-card-title {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+  .guide-card-desc {
+    font-size: 14px;
+    color: var(--text-mid);
+    font-weight: 300;
+    line-height: 1.65;
+  }
+  .guide-card-docs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 12px;
+  }
+  .guide-doc-tag {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 2px;
+    border: 1px solid var(--border);
+    color: var(--text-light);
+    background: var(--bg);
+  }
+  .guide-card-flow {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .flow-step-mini {
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .flow-step-mini.who  { background: #e8f0f8; color: #3a6a9a; }
+  .flow-step-mini.doc  { background: #e8f5e7; color: #2d8829; }
+  .flow-step-mini.send { background: #f8f0e8; color: #9a6a3a; }
+  .flow-arrow-mini {
+    color: #ccc;
+    font-size: 14px;
+  }
+
   @media (max-width: 860px) {
     .util-bar, header, main, .stats-bar { padding-left: 20px; padding-right: 20px; }
     .drawer { width: 100%; }
     .step-card { width: 175px; min-width: 160px; }
     .header-logo { display: none; }
     .phase-legend { display: none; }
+    .nav-tab { padding: 0 14px; font-size: 13px; }
   }
 </style>
 </head>
@@ -522,9 +764,7 @@
 <!-- NAV BAR -->
 <div class="navbar">
   <div class="nav-logo-block">
-    <!-- Replication of their logo: text + dashed arc SVG -->
     <div style="position:relative; width:140px; height:52px;">
-      <!-- Dashed circle arc — right side, matching their logo -->
       <svg style="position:absolute;top:0;left:0;width:140px;height:52px;" viewBox="0 0 140 52" fill="none">
         <path d="M 112 4 A 52 52 0 0 1 136 48" stroke="white" stroke-width="1.5"
               stroke-dasharray="2.5 4" stroke-linecap="round" opacity="0.7"/>
@@ -539,21 +779,37 @@
     </div>
   </div>
 
+  <div class="nav-tabs">
+    <button class="nav-tab active" data-process="civil" onclick="switchProcess('civil')">
+      <span class="tab-icon">&#9670;</span>
+      Civilní zakázka
+    </button>
+    <div class="nav-tab-divider"></div>
+    <button class="nav-tab" data-process="drobna" onclick="switchProcess('drobna')">
+      <span class="tab-icon">&#9671;</span>
+      Drobná zakázka
+    </button>
+    <div class="nav-tab-divider"></div>
+    <button class="nav-tab" data-process="platby" onclick="switchProcess('platby')">
+      <span class="tab-icon">&#9674;</span>
+      Možnosti platby
+    </button>
+  </div>
+
   <div class="nav-right">
-    <span class="nav-doc-label">Interní dokument &nbsp;·&nbsp; <strong>Průběh civilní zakázky</strong></span>
+    <span class="nav-doc-label" id="navLabel">Interní dokument &nbsp;·&nbsp; <strong>Civilní kamenické zakázky</strong></span>
   </div>
 </div>
 
 <!-- HEADER -->
-<header>
+<header id="headerEl">
   <div class="header-inner">
     <div class="header-left">
       <div class="header-eyebrow">Procesní dokumentace</div>
-      <h1>Průběh civilní<br><em>kamenické zakázky</em></h1>
-      <div class="header-sub">26 kroků &nbsp;·&nbsp; 5 fází &nbsp;·&nbsp; klikněte na krok pro zobrazení detailu</div>
+      <h1 id="headerTitle">Civilní<br><em>kamenické zakázky</em></h1>
+      <div class="header-sub" id="headerSub">26 kroků &middot; 5 fází &middot; klikněte na krok pro zobrazení detailu</div>
     </div>
 
-    <!-- Large watermark logo -->
     <svg class="header-logo" viewBox="0 0 300 200" fill="none" xmlns="http://www.w3.org/2000/svg">
       <text x="10" y="68"  font-family="Georgia,serif" font-size="42" fill="#1e1e1e" letter-spacing="1">KAMENICTVÍ</text>
       <text x="10" y="118" font-family="Georgia,serif" font-size="52" fill="#1e1e1e" letter-spacing="1">METAL</text>
@@ -563,14 +819,7 @@
       <path d="M 292 190 A 20 20 0 0 1 248 200" stroke="#1e1e1e" stroke-width="4" stroke-linecap="round"/>
     </svg>
 
-    <div class="phase-legend">
-      <div class="legend-title">Fáze procesu</div>
-      <div class="legend-row"><div class="legend-pip" style="background:var(--ph1)"></div>Fáze 1 — Akvizice & Dotazování</div>
-      <div class="legend-row"><div class="legend-pip" style="background:var(--ph2)"></div>Fáze 2 — Nabídka & Smlouva</div>
-      <div class="legend-row"><div class="legend-pip" style="background:var(--ph3)"></div>Fáze 3 — Příprava realizace</div>
-      <div class="legend-row"><div class="legend-pip" style="background:var(--ph4)"></div>Fáze 4 — Realizace & Předání</div>
-      <div class="legend-row"><div class="legend-pip" style="background:var(--ph5)"></div>Fáze 5 — Po-prodej & Uzavření</div>
-    </div>
+    <div class="phase-legend" id="phaseLegend"></div>
   </div>
 </header>
 
@@ -578,32 +827,13 @@
 <main id="main"></main>
 
 <!-- FOOTER -->
-<div class="stats-bar">
-  <div class="stat"><div class="stat-n">26</div><div class="stat-l">Kroků celkem</div></div>
-  <div class="stat-div"></div>
-  <div class="stat"><div class="stat-n">5</div><div class="stat-l">Fází procesu</div></div>
-  <div class="stat-div"></div>
-  <div class="stat"><div class="stat-n">TPV</div><div class="stat-l">Hlavní systém</div></div>
-  <div class="stat-div"></div>
-  <div class="stat"><div class="stat-n">3×</div><div class="stat-l">Kontakt se správou hřbitova</div></div>
-  <div class="stats-right">
-    <!-- small logo -->
-    <svg class="stats-logo-small" viewBox="0 0 180 120" fill="none">
-      <text x="6" y="38"  font-family="Georgia,serif" font-size="22" fill="white" letter-spacing="0.5">KAMENICTVÍ</text>
-      <text x="6" y="68"  font-family="Georgia,serif" font-size="28" fill="white" letter-spacing="0.5">METAL</text>
-      <text x="6" y="102" font-family="Georgia,serif" font-size="34" font-weight="bold" fill="white" letter-spacing="0.5">GRANIT</text>
-      <path d="M 142 8 A 62 62 0 0 1 174 112" stroke="white" stroke-width="2" stroke-dasharray="3 5" stroke-linecap="round"/>
-      <path d="M 174 112 A 12 12 0 0 1 150 118" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-    </svg>
-    <div class="stats-tagline">Kliknutím na libovolný krok zobrazíte podrobný popis, nástroje a upozornění na možné problémy.</div>
-  </div>
-</div>
+<div class="stats-bar" id="statsBar"></div>
 
 <!-- OVERLAY + DRAWER -->
 <div class="overlay" id="overlay" onclick="closeDrawer()"></div>
 <div class="drawer" id="drawer">
   <div class="drawer-head">
-    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+    <button class="drawer-close" onclick="closeDrawer()">&#10005;</button>
     <div class="drawer-krok" id="dKrok"></div>
     <div class="drawer-title" id="dTitle"></div>
   </div>
@@ -611,7 +841,10 @@
 </div>
 
 <script>
-const PHASES = [
+/* ═══════════════════════════════════════════
+   DATA: CIVILNÍ ZAKÁZKA
+═══════════════════════════════════════════ */
+const CIVIL_PHASES = [
   {id:1,name:"Akvizice & Dotazování",   sub:"první kontakt se zákazníkem", color:"var(--ph1)"},
   {id:2,name:"Nabídka & Smlouva",        sub:"cenová nabídka, SOD, záloha", color:"var(--ph2)"},
   {id:3,name:"Příprava realizace",        sub:"grafika, výroba, hřbitov",    color:"var(--ph3)"},
@@ -619,7 +852,7 @@ const PHASES = [
   {id:5,name:"Po-prodej & Uzavření",      sub:"fakturace, archiv, reference",color:"var(--ph5)"},
 ];
 
-const STEPS = [
+const CIVIL_STEPS = [
   {id:1,phase:1,
    title:"První kontakt se zákazníkem",
    hint:"Telefonicky nebo přes web → cíl: osobní schůzka",
@@ -843,6 +1076,283 @@ const STEPS = [
    warn:"",note:""},
 ];
 
+/* ═══════════════════════════════════════════
+   DATA: DROBNÁ ZAKÁZKA (urny, vzpomínáčky)
+═══════════════════════════════════════════ */
+const DROBNA_PHASES = [
+  {id:1,name:"Poptávka & Nabídka",    sub:"příjem objednávky, upřesnění, cenová nabídka", color:"var(--dph1)"},
+  {id:2,name:"Objednávka & Záloha",   sub:"objednávka, zálohová faktura, úhrada",         color:"var(--dph2)"},
+  {id:3,name:"Výroba & Příprava",     sub:"nápis, graverace, pískování, fotokeramika",    color:"var(--dph3)"},
+  {id:4,name:"Předání & Fakturace",   sub:"odběr, platba, závěrečná fakturace",           color:"var(--dph4)"},
+];
+
+const DROBNA_STEPS = [
+  /* ── FÁZE 1: Poptávka & Nabídka ── */
+  {id:1,phase:1,
+   title:"Příjem objednávky z e-shopu",
+   hint:"Kontaktování zákazníka, vzorníky písma, konzultace barvy",
+   tools:["E-shop","Email","Telefon","Vzorníky písma"],
+   persons:["Katka","Lenka"],
+   desc:"Zákazník udělá objednávku urny nebo vzpomínáčku přes e-shop, do poznámky uvede, že by chtěl i nápis.\n\nKatka telefonicky nebo mailem kontaktuje zákazníka, aby sdělil, co bude chtít na urnu nebo vzpomínáček napsat, pošle mu vzorníky písma.\n\nV případě nejasností kolem barvy urny požádá zákazníka o fotku stávajícího hrobového místa a po konzultaci s Lenkou pošle zákazníkovi fotku urny nebo vzpomínáčku, kterou bychom mu doporučili.",
+   warn:"Zákazník nemusí mít jasno v barvě — je nutné vyžádat fotku hrobového místa a konzultovat s Lenkou, než mu pošleme doporučení.",
+   note:"Vždy zaslat vzorníky písma společně s prvním kontaktem. Fotku doporučené urny posílat až po konzultaci s Lenkou."},
+
+  {id:"1b",phase:1,subOf:1,
+   title:"Osobní návštěva zákazníka v MG",
+   hint:"Výběr urny/vzpomínáčku přímo na prodejně",
+   tools:["Showroom","Katalog"],
+   persons:["Katka","Lenka","Naďou"],
+   desc:"V případě osobní návštěvy zákazníka v MG vybere Katka, ve spolupráci s Lenkou nebo Naďou, se zákazníkem vhodnou urnu nebo vzpomínáček.\n\nPoté sepíše všechny kritéria potřebná pro výrobu urny.\n\nPři odchodu z MG už zákazník ví orientačně, kolik bude celá zakázka stát.",
+   warn:"Zákazník musí odcházet s jasnou představou o ceně — nezapomenout na orientační kalkulaci přímo na místě.",
+   note:"Po osobní návštěvě Katka udělá přesnou cenovou nabídku a pošle zákazníkovi k odsouhlasení."},
+
+  {id:2,phase:1,
+   title:"Cenová nabídka a odsouhlasení",
+   hint:"Zpracování CN, odeslání zákazníkovi",
+   tools:["Email","Cenová nabídka"],
+   persons:["Katka"],
+   desc:"Po ujasnění všech kritérií udělá Katka cenovou nabídku, kterou pošle zákazníkovi k odsouhlasení.\n\nV případě osobní návštěvy — Katka poté udělá přesnou cenovou nabídku, kterou pošle zákazníkovi k odsouhlasení.",
+   warn:"Nabídka musí obsahovat všechny dohodnuté položky — nápis, doplňky, fotokeramiku. Zkontrolovat před odesláním.",
+   note:""},
+
+  /* ── FÁZE 2: Objednávka & Záloha ── */
+  {id:3,phase:2,
+   title:"Vytvoření objednávky",
+   hint:"Objednávka + podklady pro účetní → zálohová faktura",
+   tools:["Objednávka","Email","Účetní"],
+   persons:["Katka","Účetní"],
+   desc:"Po odsouhlasení cenové nabídky udělá Katka objednávku a předá podklady účetní k zaslání zálohové faktury zákazníkovi.",
+   warn:"Nezapomenout předat podklady účetní včas — záloha je podmínkou zahájení výroby.",
+   note:"V případě osobní návštěvy mají někteří zákazníci s sebou hotovost — uhradí zálohu na místě v hotovosti."},
+
+  {id:4,phase:2,
+   title:"Úhrada zálohy",
+   hint:"Faktura / hotovost na místě",
+   tools:["Účetní","Pokladna"],
+   persons:["Katka","Účetní"],
+   desc:"Zákazník uhradí zálohu dle zálohové faktury převodem nebo v hotovosti na místě při osobní návštěvě.\n\nPo uhrazení zálohy může Katka zahájit přípravu výroby.",
+   warn:"Bez uhrazené zálohy nezahajovat výrobu! Při platbě hotovostí zajistit potvrzení.",
+   note:""},
+
+  /* ── FÁZE 3: Výroba & Příprava ── */
+  {id:5,phase:3,
+   title:"Vytvoření návrhu nápisu",
+   hint:"Návrh nápisu na urnu / vzpomínáček → schválení zákazníkem",
+   tools:["Grafický software","Email"],
+   persons:["Katka"],
+   desc:"Po uhrazení zálohy Katka vytvoří nápis na urnu.\n\nPoté pošle náhled nápisu zákazníkovi ke kontrole a schválení.",
+   warn:"Před odesláním náhledu zkontrolovat pravopis a rozmístění textu. Každá chyba = reklamace.",
+   note:""},
+
+  {id:"5b",phase:3,subOf:5,
+   title:"Spolupráce s Adamem (složitější nápisy)",
+   hint:"Graverace na vzpomínáček, složitější nápisy",
+   tools:["Email","Grafický software"],
+   persons:["Katka","Adam"],
+   desc:"V případě, že je nápis složitější, nebo v případě graverace na vzpomínáček, požádá Katka Adama o spolupráci.\n\nPoté pošle náhled nápisu zákazníkovi ke kontrole a schválení.",
+   warn:"Při gravírování nutná přesná koordinace s Adamem — ověřit technické možnosti před slíbením zákazníkovi.",
+   note:""},
+
+  {id:6,phase:3,
+   title:"Objednávka klínku / destičky",
+   hint:"Papírová objednávka → Ivo Prus.",
+   tools:["Objednávka (papír)"],
+   persons:["Katka","Ivo Prus."],
+   conditional:true,
+   desc:"Pokud je součástí zakázky klínek nebo destička, předá Katka osobně objednávku v papírové podobě Ivovi Prus., aby zajistil výrobu.",
+   warn:"Objednávka musí být fyzicky předána — ne e-mailem! Ověřit termín dodání u Iva.",
+   note:"Tento krok se provádí pouze pokud je součástí zakázky klínek nebo destička."},
+
+  {id:7,phase:3,
+   title:"Tisk, vypískování a vybarvení nápisu",
+   hint:"Plotr → folie → pískování → vybarvení",
+   tools:["Plotr","Pískování","Barvy"],
+   persons:["Katka","Lenka","Ivo Prus."],
+   desc:"Po schválení nápisu zákazníkem Katka vytiskne nápis na plotru (až je těch nápisů více) a předá folii Lence.\n\nLenka připraví folii na urnu nebo vzpomínáček a Ivo Prus. nápis vypískuje.\n\nPo vypískování nápis Lenka vybarví.",
+   warn:"Tisk na plotru se provádí hromadně — koordinovat termíny. Po vypískování kontrola kvality před vybarvením.",
+   note:"Pořadí: Katka (tisk) → Lenka (příprava folie) → Ivo (pískování) → Lenka (vybarvení)."},
+
+  {id:8,phase:3,
+   title:"Objednávka fotokeramiky",
+   hint:"Katka → Simona → Kalumě",
+   tools:["Email"],
+   persons:["Katka","Simona"],
+   conditional:true,
+   desc:"V případě, že je součástí zakázky fotokeramika, předá Katka emailem přesné informace Simoně, která objedná fotokeramiku v Kalumě.",
+   warn:"Přesné informace = rozměr, fotografie, kvalita tisku. Ověřit dodací lhůtu Kalumě.",
+   note:"Tento krok se provádí pouze pokud zákazník objednal fotokeramiku."},
+
+  /* ── FÁZE 4: Předání & Fakturace ── */
+  {id:9,phase:4,
+   title:"Kontaktování zákazníka a domluva odběru",
+   hint:"Všechny části hotové → forma odběru a platby",
+   tools:["Telefon","Email"],
+   persons:["Katka"],
+   desc:"Až jsou všechny části zakázky hotové, Katka kontaktuje zákazníka a domluví se na formě odběru a platby.",
+   warn:"Před kontaktováním zákazníka ověřit, že skutečně VŠECHNY části zakázky jsou kompletní (nápis, klínek, fotokeramika…).",
+   note:""},
+
+  {id:10,phase:4,
+   title:"Závěrečná fakturace",
+   hint:"Předání podkladů účetní",
+   tools:["Účetní","Faktura"],
+   persons:["Katka","Účetní"],
+   desc:"Katka předá účetní potřebné podklady k závěrečné fakturaci.",
+   warn:"Zkontrolovat, že vše odpovídá odsouhlasené CN — žádné nefakturované položky.",
+   note:""},
+];
+
+/* ═══════════════════════════════════════════
+   DATA: MOŽNOSTI PLATBY ZA ZBOŽÍ
+═══════════════════════════════════════════ */
+const PLATBY_SECTIONS = [
+  {
+    id: 'civil',
+    name: 'CIVIL',
+    sub: 'e-shop, telefonické a e-mailové objednávky, osobní odběr',
+    color: '#3aaa35',
+    icon: 'C',
+    items: [
+      {
+        id: 'dobirka',
+        title: 'Dobírka',
+        color: '#3aaa35',
+        desc: 'Vytiskne se faktura z e-shopových objednávek, posílá se s balíkem zákazníkovi.\n\nV případě, že je objednávka telefonická nebo přes e-mail po úhradě se vystaví Zjednodušený doklad řada 777…, zde se uvede „Dobírka", posílá se zákazníkovi s balíkem.',
+        docs: ['Faktura (e-shop)', 'Zjednodušený doklad řada 777'],
+        flow: [
+          {type:'who', text:'Zákazník objedná'},
+          {type:'doc', text:'Faktura / Doklad 777'},
+          {type:'send', text:'Posílá se s balíkem'},
+        ],
+      },
+      {
+        id: 'predem',
+        title: 'Platba předem na účet',
+        color: '#4a7fa8',
+        desc: 'Pokud není zadáno přes e-shop (je to telefonická nebo e-mailová objednávka), tak se zákazníkovi zašlou předem na e-mail platební údaje.\n\nPo úhradě se buď vystaví Zjednodušený doklad řada 777…, na který se uvede „Zaplaceno" a odešlá se zákazníkovi s balíkem.',
+        docs: ['Platební údaje (e-mail)', 'Zjednodušený doklad řada 777'],
+        flow: [
+          {type:'who', text:'Zákazník objedná'},
+          {type:'send', text:'E-mail s údaji'},
+          {type:'who', text:'Zákazník uhradí'},
+          {type:'doc', text:'Doklad 777 „Zaplaceno"'},
+          {type:'send', text:'Posílá se s balíkem'},
+        ],
+      },
+      {
+        id: 'hotovost',
+        title: 'V hotovosti',
+        color: '#9a7a3a',
+        desc: 'V kanceláři se vystaví zákazníkovi zjednodušený daňový doklad M 26/…',
+        docs: ['Zjednodušený daňový doklad M 26/…'],
+        flow: [
+          {type:'who', text:'Zákazník v kanceláři'},
+          {type:'doc', text:'Daňový doklad M 26/…'},
+        ],
+      },
+    ],
+  },
+  {
+    id: 'kamenici',
+    name: 'KAMENÍCI a ZAHRANIČÍ',
+    sub: 'faktury se splatností, platby předem, hotovost',
+    color: '#7a5aaa',
+    icon: 'K',
+    items: [
+      {
+        id: 'faktura_splatnost',
+        title: 'Faktura se splatností',
+        color: '#7a5aaa',
+        desc: 'Převážně na fakturu se splatností. Zákazník se zapíše se do sešitu fakturace, po zadání na dopravu, účetní vystaví fakturu.\n\nFaktura jde buď s balíkem přímo zákazníkovi, nebo účetní posílá e-mailem.',
+        docs: ['Sešit fakturace', 'Faktura se splatností'],
+        flow: [
+          {type:'who', text:'Zákazník objedná'},
+          {type:'doc', text:'Zápis do sešitu'},
+          {type:'who', text:'Účetní vystaví FA'},
+          {type:'send', text:'S balíkem / e-mailem'},
+        ],
+      },
+      {
+        id: 'kam_predem',
+        title: 'Kameníci — platba předem',
+        color: '#aa6a3a',
+        desc: 'Většinou u nových kameníků. Účetní vystaví zálohovou fakturu na celou částku, tato se zašle na e-mail.\n\nPo přijetí platby vystaví účetní fakturu s nulovou částkou — doklad o zaplacení — a posílá se buď s balíkem nebo e-mailem.',
+        docs: ['Zálohová faktura', 'Faktura s nulovou částkou (doklad o zaplacení)'],
+        flow: [
+          {type:'who', text:'Nový kameník'},
+          {type:'doc', text:'Zálohová FA (celá částka)'},
+          {type:'send', text:'E-mailem'},
+          {type:'who', text:'Kameník uhradí'},
+          {type:'doc', text:'FA s nulovou částkou'},
+          {type:'send', text:'S balíkem / e-mailem'},
+        ],
+      },
+      {
+        id: 'kam_hotove',
+        title: 'Kameníci — hotově',
+        color: '#4a8a4a',
+        desc: 'Vystaví účetní fakturu na hotovost.',
+        docs: ['Faktura na hotovost'],
+        flow: [
+          {type:'who', text:'Kameník v kanceláři'},
+          {type:'doc', text:'Účetní: FA na hotovost'},
+        ],
+      },
+    ],
+  },
+];
+
+/* ═══════════════════════════════════════════
+   PROCESS CONFIG
+═══════════════════════════════════════════ */
+const PROCESSES = {
+  civil: {
+    phases: CIVIL_PHASES,
+    steps: CIVIL_STEPS,
+    title: 'Civilní<br><em>kamenické zakázky</em>',
+    navLabel: 'Interní dokument &nbsp;·&nbsp; <strong>Civilní kamenické zakázky</strong>',
+    stats: [
+      {n:'26', l:'Kroků celkem'},
+      {n:'5',  l:'Fází procesu'},
+      {n:'TPV',l:'Hlavní systém'},
+      {n:'3×', l:'Kontakt se správou hřbitova'},
+    ],
+    tagline: 'Kliknutím na libovolný krok zobrazíte podrobný popis, nástroje a upozornění na možné problémy.',
+  },
+  drobna: {
+    phases: DROBNA_PHASES,
+    steps: DROBNA_STEPS,
+    title: 'Drobné<br><em>kamenické zakázky</em>',
+    navLabel: 'Interní dokument &nbsp;·&nbsp; <strong>Drobné kamenické zakázky</strong>',
+    stats: [
+      {n:'10', l:'Kroků celkem'},
+      {n:'4',  l:'Fází procesu'},
+      {n:'Katka',l:'Hlavní zodpovědnost'},
+      {n:'6',  l:'Zapojených osob'},
+    ],
+    tagline: 'Postup zpracování zakázky na kulaté urny nebo vzpomínáčky. Klikněte na krok pro detail.',
+  },
+  platby: {
+    type: 'guide',
+    sections: PLATBY_SECTIONS,
+    title: 'Možnosti platby<br><em>za zboží</em>',
+    navLabel: 'Interní dokument &nbsp;·&nbsp; <strong>Možnosti platby za zboží</strong>',
+    stats: [
+      {n:'6',  l:'Variant platby'},
+      {n:'2',  l:'Kategorie zákazníků'},
+      {n:'CIVIL', l:'E-shop & přímý prodej'},
+      {n:'B2B', l:'Kameníci & zahraničí'},
+    ],
+    tagline: 'Přehled účetních dokladů a postupů při různých formách platby. Klikněte na kartu pro detail.',
+  },
+};
+
+let currentProcess = 'civil';
+
+/* ═══════════════════════════════════════════
+   RENDERING
+═══════════════════════════════════════════ */
+
 function arrow(color){
   return `<div class="flow-arrow" style="color:${color}88">
     <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8"
@@ -852,30 +1362,161 @@ function arrow(color){
   </div>`;
 }
 
-function card(s, isSub){
-  const ph = PHASES.find(p=>p.id===s.phase);
+function card(s, isSub, phases){
+  const ph = phases.find(p=>p.id===s.phase);
   const col = ph?.color || 'var(--green)';
-  return `<div class="step-card${isSub?' sub-card':''}"
+  const isConditional = s.conditional;
+  let cls = 'step-card';
+  if(isSub) cls += ' sub-card';
+  if(isConditional && !isSub) cls += ' conditional-card';
+
+  let personsHtml = '';
+  if(s.persons && s.persons.length > 0){
+    personsHtml = s.persons.slice(0,2).map(p => {
+      const cls = p.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g,'').replace(/\./g,'');
+      return `<span class="person-badge ${cls}">${p}</span>`;
+    }).join('');
+  }
+
+  let condHtml = '';
+  if(isConditional){
+    condHtml = '<span class="cond-badge">podmíněný</span>';
+  }
+
+  return `<div class="${cls}"
     style="border-top-color:${col}"
     onclick="openDrawer('${s.id}')">
     <div class="step-num">
       <span class="step-num-dot" style="background:${col}"></span>
       KROK ${s.id}
+      ${condHtml}
     </div>
     <div class="step-title">${s.title}</div>
     <div class="step-hint">${s.hint}</div>
     <div class="step-tools">
       ${s.tools.slice(0,2).map(t=>`<span class="tool-tag">${t}</span>`).join('')}
     </div>
+    ${personsHtml ? '<div style="margin-top:4px">'+personsHtml+'</div>' : ''}
   </div>`;
 }
 
-function render(){
-  const main = document.getElementById('main');
+function renderLegend(phases){
+  const el = document.getElementById('phaseLegend');
+  let html = '<div class="legend-title">Fáze procesu</div>';
+  phases.forEach((ph,i) => {
+    html += `<div class="legend-row"><div class="legend-pip" style="background:${ph.color}"></div>Fáze ${ph.id} — ${ph.name}</div>`;
+  });
+  el.innerHTML = html;
+}
+
+function renderStats(config){
+  const el = document.getElementById('statsBar');
   let html = '';
-  PHASES.forEach(ph => {
-    const mains = STEPS.filter(s=>s.phase===ph.id&&!s.subOf);
-    const subs  = STEPS.filter(s=>s.phase===ph.id&&s.subOf);
+  config.stats.forEach((st,i) => {
+    html += `<div class="stat"><div class="stat-n">${st.n}</div><div class="stat-l">${st.l}</div></div>`;
+    if(i < config.stats.length - 1) html += '<div class="stat-div"></div>';
+  });
+  html += `<div class="stats-right">
+    <svg class="stats-logo-small" viewBox="0 0 180 120" fill="none">
+      <text x="6" y="38"  font-family="Georgia,serif" font-size="22" fill="white" letter-spacing="0.5">KAMENICTVÍ</text>
+      <text x="6" y="68"  font-family="Georgia,serif" font-size="28" fill="white" letter-spacing="0.5">METAL</text>
+      <text x="6" y="102" font-family="Georgia,serif" font-size="34" font-weight="bold" fill="white" letter-spacing="0.5">GRANIT</text>
+      <path d="M 142 8 A 62 62 0 0 1 174 112" stroke="white" stroke-width="2" stroke-dasharray="3 5" stroke-linecap="round"/>
+      <path d="M 174 112 A 12 12 0 0 1 150 118" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+    <div class="stats-tagline">${config.tagline}</div>
+  </div>`;
+  el.innerHTML = html;
+}
+
+function renderGuide(){
+  const config = PROCESSES[currentProcess];
+  const sections = config.sections;
+  const main = document.getElementById('main');
+
+  const totalItems = sections.reduce((n,s)=>n+s.items.length,0);
+  const sub = `${totalItems} variant &middot; ${sections.length} kategorie &middot; klikněte na kartu pro zobrazení detailu`;
+
+  document.getElementById('headerTitle').innerHTML = config.title;
+  document.getElementById('headerSub').innerHTML = sub;
+  document.getElementById('navLabel').innerHTML = config.navLabel;
+
+  // legend for guide
+  const legendEl = document.getElementById('phaseLegend');
+  let legendHtml = '<div class="legend-title">Kategorie</div>';
+  sections.forEach(sec => {
+    legendHtml += `<div class="legend-row"><div class="legend-pip" style="background:${sec.color}"></div>${sec.name}</div>`;
+  });
+  legendEl.innerHTML = legendHtml;
+
+  renderStats(config);
+
+  let html = '';
+  sections.forEach(sec => {
+    html += `<div class="guide-section">
+      <div class="guide-section-header">
+        <div class="guide-section-icon" style="background:${sec.color}">${sec.icon}</div>
+        <div class="guide-section-titles">
+          <div class="guide-section-name">${sec.name}</div>
+          <div class="guide-section-sub">${sec.sub}</div>
+        </div>
+      </div>
+      <div class="guide-divider" style="background:linear-gradient(to right,${sec.color}60 80px,var(--border-light) 80px)"></div>
+      <div class="guide-cards">`;
+    sec.items.forEach(item => {
+      const flowHtml = item.flow.map((f,i) => {
+        let out = `<span class="flow-step-mini ${f.type}">${f.text}</span>`;
+        if(i < item.flow.length - 1) out += '<span class="flow-arrow-mini">→</span>';
+        return out;
+      }).join('');
+
+      html += `<div class="guide-card" onclick="openGuideDrawer('${sec.id}','${item.id}')">
+        <div class="guide-card-top" style="background:${item.color}">${item.title}</div>
+        <div class="guide-card-body">
+          <div class="guide-card-desc">${item.desc.split('\n')[0]}</div>
+          <div class="guide-card-docs">
+            ${item.docs.map(d=>`<span class="guide-doc-tag">${d}</span>`).join('')}
+          </div>
+          <div class="guide-card-flow">${flowHtml}</div>
+        </div>
+      </div>`;
+    });
+    html += `</div></div>`;
+  });
+
+  main.innerHTML = html;
+  main.classList.remove('fade-enter');
+  void main.offsetWidth;
+  main.classList.add('fade-enter');
+}
+
+function render(){
+  const config = PROCESSES[currentProcess];
+
+  if(config.type === 'guide'){
+    renderGuide();
+    return;
+  }
+
+  const phases = config.phases;
+  const steps  = config.steps;
+  const main   = document.getElementById('main');
+  let html = '';
+
+  // count main steps
+  const mainSteps = steps.filter(s => !s.subOf);
+  const sub = `${mainSteps.length} kroků &middot; ${phases.length} fáze &middot; klikněte na krok pro zobrazení detailu`;
+
+  document.getElementById('headerTitle').innerHTML = config.title;
+  document.getElementById('headerSub').innerHTML = sub;
+  document.getElementById('navLabel').innerHTML = config.navLabel;
+
+  renderLegend(phases);
+  renderStats(config);
+
+  phases.forEach(ph => {
+    const mains = steps.filter(s=>s.phase===ph.id&&!s.subOf);
+    const subs  = steps.filter(s=>s.phase===ph.id&&s.subOf);
     html += `<div class="phase-block">
       <div class="phase-header">
         <div class="phase-num-badge" style="background:${ph.color}">0${ph.id}</div>
@@ -887,34 +1528,53 @@ function render(){
       <div class="phase-divider" style="background:linear-gradient(to right,${ph.color}60 80px,var(--border-light) 80px)"></div>
       <div class="flow-row">`;
     mains.forEach((s,i)=>{
-      html += card(s,false);
+      html += card(s,false,phases);
       if(i < mains.length-1) html += arrow(ph.color);
     });
     html += `</div>`;
     subs.forEach(sub=>{
-      const parent = STEPS.find(s=>s.id===sub.subOf);
+      const parent = steps.find(s=>s.id===sub.subOf);
       html += `<div class="sub-flow">
-        <span class="sub-label">↳ varianta: ${(parent?.title||'').substring(0,24)}…</span>
-        ${card(sub,true)}
+        <span class="sub-label">↳ varianta: ${(parent?.title||'').substring(0,28)}…</span>
+        ${card(sub,true,phases)}
       </div>`;
     });
     html += `</div>`;
   });
+
   main.innerHTML = html;
+  main.classList.remove('fade-enter');
+  void main.offsetWidth; // reflow
+  main.classList.add('fade-enter');
 }
 
 function openDrawer(id){
-  const s = STEPS.find(x=>String(x.id)===String(id));
+  const config = PROCESSES[currentProcess];
+  const steps  = config.steps;
+  const phases = config.phases;
+  const s = steps.find(x=>String(x.id)===String(id));
   if(!s) return;
-  const ph = PHASES.find(p=>p.id===s.phase);
+  const ph = phases.find(p=>p.id===s.phase);
   document.getElementById('dKrok').textContent = `Krok ${s.id}  ·  ${ph?.name||''}`;
   document.getElementById('dTitle').textContent = s.title;
   let b = `
     <div class="d-section">
       <div class="d-label">Popis</div>
       <div class="d-text">${s.desc.replace(/\n/g,'<br>')}</div>
-    </div>
-    <div class="d-section">
+    </div>`;
+
+  // Persons (drobná zakázka)
+  if(s.persons && s.persons.length > 0){
+    b += `<div class="d-section">
+      <div class="d-label">Zodpovědné osoby</div>
+      <div class="d-persons">${s.persons.map(p => {
+        const cls = p.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g,'').replace(/\./g,'');
+        return `<span class="d-person ${cls}">${p}</span>`;
+      }).join('')}</div>
+    </div>`;
+  }
+
+  b += `<div class="d-section">
       <div class="d-label">Nástroje &amp; systémy</div>
       <div class="d-tools">${s.tools.map(t=>`<span class="d-tool">${t}</span>`).join('')}</div>
     </div>`;
@@ -928,6 +1588,48 @@ function openDrawer(id){
       <div class="d-label">Poznámky</div>
       <div class="d-note">${s.note}</div>
     </div>`;
+  if(s.conditional) b += `
+    <div class="d-section">
+      <div class="d-label">Podmínka</div>
+      <div class="d-note">Tento krok se provádí pouze za určitých podmínek — viz popis výše.</div>
+    </div>`;
+
+  document.getElementById('dBody').innerHTML = b;
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+}
+
+function openGuideDrawer(secId, itemId){
+  const sec = PLATBY_SECTIONS.find(s=>s.id===secId);
+  if(!sec) return;
+  const item = sec.items.find(i=>i.id===itemId);
+  if(!item) return;
+
+  document.getElementById('dKrok').textContent = sec.name;
+  document.getElementById('dTitle').textContent = item.title;
+
+  const flowHtml = item.flow.map((f,i) => {
+    let out = `<span class="flow-step-mini ${f.type}">${f.text}</span>`;
+    if(i < item.flow.length - 1) out += '<span class="flow-arrow-mini">→</span>';
+    return out;
+  }).join('');
+
+  let b = `
+    <div class="d-section">
+      <div class="d-label">Popis</div>
+      <div class="d-text">${item.desc.replace(/\n/g,'<br>')}</div>
+    </div>
+    <div class="d-section">
+      <div class="d-label">Účetní doklady</div>
+      <div class="d-tools">${item.docs.map(d=>`<span class="d-tool">${d}</span>`).join('')}</div>
+    </div>
+    <div class="d-section">
+      <div class="d-label">Postup</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
+        ${flowHtml}
+      </div>
+    </div>`;
+
   document.getElementById('dBody').innerHTML = b;
   document.getElementById('drawer').classList.add('open');
   document.getElementById('overlay').classList.add('open');
@@ -938,6 +1640,23 @@ function closeDrawer(){
   document.getElementById('overlay').classList.remove('open');
 }
 
+function switchProcess(key){
+  if(key === currentProcess) return;
+  closeDrawer();
+  currentProcess = key;
+
+  // Update tabs
+  document.querySelectorAll('.nav-tab').forEach(tab => {
+    tab.classList.toggle('active', tab.dataset.process === key);
+  });
+
+  render();
+
+  // Scroll to top smoothly
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// Initial render
 render();
 </script>
 </body>
